@@ -1,32 +1,62 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view />
-  </div>
+  <v-app>
+    <nav>
+      <v-app-bar dark class="primary">
+        <v-toolbar-title class="headline">#WirVsVirusHack</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-toolbar-items class="hidden-sm-and-down">
+          <v-btn text to="/" exact>Patient melden</v-btn>
+          <v-btn text to="/about">Zielsetzung</v-btn>
+        </v-toolbar-items>
+      </v-app-bar>
+
+      <v-navigation-drawer dark color="primary" app v-model="drawer" right>
+        <v-list dense nav class="py-0">
+          <v-list-item two-line class="px-0">
+            <v-list-item-content>
+              <v-list-item-title class="title">Menü</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-divider></v-divider>
+
+          <v-list-item to="/">
+            <v-list-item-icon>
+              <v-icon>home</v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-content>
+              <v-list-item-title>Patient melden</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item to="/about">
+            <v-list-item-icon>
+              <v-icon>description</v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-content>
+              <v-list-item-title>Zielsetzung</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-navigation-drawer>
+    </nav>
+
+    <v-content>
+      <!-- Display view pages here based on route -->
+      <router-view></router-view>
+    </v-content>
+  </v-app>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+<script>
+export default {
+  name: "App",
+  data() {
+    return {
+      drawer: false // Hide mobile side menu by default
+    };
   }
-}
-</style>
+};
+</script>
