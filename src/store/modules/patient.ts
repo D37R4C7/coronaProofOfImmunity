@@ -3,22 +3,23 @@ import Axios from "axios";
 const state = {
   loggedIn: false,
   krankenkassen: [
-    "Privatpatient",
-    "AOK Rheinland/Hamburg",
-    "Barmer",
-    "DAK Gesundheit",
-    "Techniker Krankenkasse (TK)"
+    { value: "privat", text: "Privatpatient" },
+    { value: "Aok", text: "AOK Rheinland/Hamburg" },
+    { value: "barmer", text: "Barmer" },
+    { value: "tk", text: "Techniker Krankenkasse (TK)" }
   ],
-  tests: ["Antikörpertest", "Test sowieso", "Test irgendwie"]
+  tests: [
+    { value: "Antikoerper", text: "Antikörpertest" },
+    { value: "pcr", text: "PCR" }
+  ]
 };
 
 const mutations = {
   save: (state: any, payload: any) => {
-    Axios.post("http://abc.de", payload, {
+    Axios.post("http://hackathon.64b.de/test_results", payload, {
       headers: { "Content-Type": "application/x-www-form-urlencoded" }
     })
       .then((response: any) => {
-        console.log("send");
         console.log(response);
       })
       .catch((error: any) => {

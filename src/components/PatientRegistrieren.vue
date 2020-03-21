@@ -73,7 +73,6 @@
                   label="Geburtsdatum"
                   append-icon="event"
                   :rules="rules"
-                  readonly
                   v-on="on"
                 ></v-text-field>
               </template>
@@ -147,36 +146,48 @@
               v-model="immun"
               label="COVID 19 Immunität wurde festgestellt"
             ></v-switch>
+
+            <v-row class="mb-6" no-gutters>
+              <v-col xs="12" md="6">
+                <v-text-field
+                  v-model="decodedCode"
+                  label="Seriennummer des Tests"
+                  :rules="rules"
+                  hide-details="auto"
+                ></v-text-field>
+              </v-col>
+              <v-col xs="12" md="6">
+                <v-btn
+                  color="primary"
+                  @click="
+                    () => {
+                      scanCode = true;
+                      decodedCode = '';
+                    }
+                  "
+                  >Seriennummer scannen</v-btn
+                >
+              </v-col>
+            </v-row>
+
+            <qrcode-stream
+              v-if="scanCode"
+              @decode="onDecode"
+              class="mt-3"
+            ></qrcode-stream>
           </v-form>
+        </v-card-text>
 
-          <v-row class="mb-6" no-gutters>
-            <v-col xs="12" md="6">
-              <v-text-field
-                v-model="decodedCode"
-                label="Seriennummer des Tests"
-                :rules="rules"
-                hide-details="auto"
-              ></v-text-field>
-            </v-col>
-            <v-col xs="12" md="6">
-              <v-btn
-                color="primary"
-                @click="
-                  () => {
-                    scanCode = true;
-                    decodedCode = '';
-                  }
-                "
-                >Seriennummer scannen</v-btn
-              >
-            </v-col>
-          </v-row>
+        <v-toolbar dark color="teal">
+          <v-toolbar-title>Andere Projekte unterstützen</v-toolbar-title>
+        </v-toolbar>
+        <v-card-text>
+          Der Patient möchte seinen Immunstatus folgenden Projekten zur
+          Verfügung stellen:
 
-          <qrcode-stream
-            v-if="scanCode"
-            @decode="onDecode"
-            class="mt-3"
-          ></qrcode-stream>
+          <v-form>
+            <v-switch v-model="immun" label="IMMUNEHEROES"></v-switch>
+          </v-form>
         </v-card-text>
 
         <v-card-actions>
@@ -228,18 +239,26 @@ export default class Patientregistrieren extends Vue {
 
   save() {
     store.dispatch("patient/save", {
-      krankenkasse: this.krankenkasse,
-      versichertennummer: this.versichertennummer,
-      vorname: this.vorname,
-      nachname: this.nachname,
-      strasse: this.strasse,
-      plz: this.plz,
-      ort: this.ort,
-      geburtsdatum: this.birthdate,
-      testMethode: this.test,
-      testDatum: this.testdate,
-      immununitaet: this.immun,
-      seriennummer: this.decodedCode
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      insurance_company: this.krankenkasse.value,
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      citizen_id: this.versichertennummer,
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      first_name: this.vorname,
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      last_name: this.nachname,
+      street: this.strasse,
+      postcode: this.plz,
+      city: this.ort,
+      birthday: this.birthdate,
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      test_method: this.test.value,
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      date_of_test: this.testdate,
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      result_positve: this.immun,
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      case_code: this.decodedCode
     });
   }
 
